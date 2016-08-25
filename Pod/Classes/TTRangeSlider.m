@@ -12,6 +12,8 @@ const float TEXT_HEIGHT = 14;
 
 @property (nonatomic, strong) CALayer *sliderLine;
 @property (nonatomic, strong) CALayer *sliderLineBetweenHandles;
+@property (nonatomic, strong) CALayer *sliderLineLeftOfHandles;
+@property (nonatomic, strong) CALayer *sliderLineRightOfHandles;
 
 @property (nonatomic, strong) CALayer *leftHandle;
 @property (nonatomic, assign) BOOL leftHandleSelected;
@@ -54,7 +56,8 @@ static const CGFloat kLabelsFontSize = 12.0f;
     _lineHeight = 1.0;
     
     _handleBorderWidth = 0.0;
-    _handleBorderColor = self.tintColor;
+    _leftHandleBorderColor = self.tintColor;
+    _rightHandleBorderColor = self.tintColor;
     
     _labelPadding = 8.0;
     
@@ -67,13 +70,21 @@ static const CGFloat kLabelsFontSize = 12.0f;
     self.sliderLineBetweenHandles = [CALayer layer];
     self.sliderLineBetweenHandles.backgroundColor = self.tintColor.CGColor;
     [self.layer addSublayer:self.sliderLineBetweenHandles];
+    
+    self.sliderLineLeftOfHandles = [CALayer layer];
+    self.sliderLineLeftOfHandles.backgroundColor = self.tintColor.CGColor;
+    [self.layer addSublayer:self.sliderLineLeftOfHandles];
+    
+    self.sliderLineRightOfHandles = [CALayer layer];
+    self.sliderLineRightOfHandles.backgroundColor = self.tintColor.CGColor;
+    [self.layer addSublayer:self.sliderLineRightOfHandles];
 
     //draw the minimum slider handle
     self.leftHandle = [CALayer layer];
     self.leftHandle.cornerRadius = self.handleDiameter / 2;
     self.leftHandle.backgroundColor = self.tintColor.CGColor;
     self.leftHandle.borderWidth = self.handleBorderWidth;
-    self.leftHandle.borderColor = self.handleBorderColor.CGColor;
+    self.leftHandle.borderColor = self.leftHandleBorderColor.CGColor;
     [self.layer addSublayer:self.leftHandle];
 
     //draw the maximum slider handle
@@ -81,7 +92,7 @@ static const CGFloat kLabelsFontSize = 12.0f;
     self.rightHandle.cornerRadius = self.handleDiameter / 2;
     self.rightHandle.backgroundColor = self.tintColor.CGColor;
     self.rightHandle.borderWidth = self.handleBorderWidth;
-    self.rightHandle.borderColor = self.handleBorderColor.CGColor;
+    self.rightHandle.borderColor = self.rightHandleBorderColor.CGColor;
     [self.layer addSublayer:self.rightHandle];
 
     self.leftHandle.frame = CGRectMake(0, 0, self.handleDiameter, self.handleDiameter);
@@ -171,8 +182,10 @@ static const CGFloat kLabelsFontSize = 12.0f;
     [CATransaction setAnimationDuration:0.5];
     [CATransaction setAnimationTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut] ];
     self.sliderLine.backgroundColor = color;
-    if (self.handleColor == nil) {
+    if (self.leftHandleColor == nil) {
         self.leftHandle.backgroundColor = color;
+    }
+    if (self.rightHandleColor == nil) {
         self.rightHandle.backgroundColor = color;
     }
 
@@ -238,7 +251,20 @@ static const CGFloat kLabelsFontSize = 12.0f;
     self.rightHandle.position= rightHandleCenter;
     
     //positioning for the dist slider line
-    self.sliderLineBetweenHandles.frame = CGRectMake(self.leftHandle.position.x, self.sliderLine.frame.origin.y, self.rightHandle.position.x-self.leftHandle.position.x, self.lineHeight);
+    self.sliderLineBetweenHandles.frame = CGRectMake(self.leftHandle.position.x,
+                                                     self.sliderLine.frame.origin.y,
+                                                     self.rightHandle.position.x-self.leftHandle.position.x,
+                                                     self.lineHeight);
+    
+    self.sliderLineLeftOfHandles.frame = CGRectMake(self.sliderLine.frame.origin.x,
+                                                    self.sliderLine.frame.origin.y,
+                                                    self.leftHandle.position.x,
+                                                    self.lineHeight);
+    
+    self.sliderLineRightOfHandles.frame = CGRectMake(self.rightHandle.position.x,
+                                                     self.sliderLine.frame.origin.y,
+                                                     self.sliderLine.frame.origin.x + self.frame.size.width,
+                                                     self.lineHeight);
 }
 
 - (void)updateLabelPositions {
@@ -563,16 +589,24 @@ static const CGFloat kLabelsFontSize = 12.0f;
     self.rightHandle.backgroundColor = [[UIColor clearColor] CGColor];
 }
 
--(void)setHandleColor:(UIColor *)handleColor{
-    _handleColor = handleColor;
-    self.leftHandle.backgroundColor = [handleColor CGColor];
-    self.rightHandle.backgroundColor = [handleColor CGColor];
+-(void)setLeftHandleColor:(UIColor *)leftHandleColor{
+    _leftHandleColor = leftHandleColor;
+    self.leftHandle.backgroundColor = [leftHandleColor CGColor];
 }
 
--(void)setHandleBorderColor:(UIColor *)handleBorderColor{
-    _handleBorderColor = handleBorderColor;
-    self.leftHandle.borderColor = [handleBorderColor CGColor];
-    self.rightHandle.borderColor = [handleBorderColor CGColor];
+-(void)setLeftHandleBorderColor:(UIColor *)leftHandleBorderColor{
+    _leftHandleBorderColor = leftHandleBorderColor;
+    self.leftHandle.borderColor = [leftHandleBorderColor CGColor];
+}
+
+-(void)setRightHandleColor:(UIColor *)rightHandleColor{
+    _rightHandleColor = rightHandleColor;
+    self.rightHandle.backgroundColor = [rightHandleColor CGColor];
+}
+
+-(void)setRightHandleBorderColor:(UIColor *)rightHandleBorderColor{
+    _rightHandleBorderColor = rightHandleBorderColor;
+    self.rightHandle.borderColor = [rightHandleBorderColor CGColor];
 }
 
 -(void)setHandleBorderWidth:(CGFloat)handleBorderWidth{
@@ -595,6 +629,16 @@ static const CGFloat kLabelsFontSize = 12.0f;
 -(void)setTintColorBetweenHandles:(UIColor *)tintColorBetweenHandles{
     _tintColorBetweenHandles = tintColorBetweenHandles;
     self.sliderLineBetweenHandles.backgroundColor = [tintColorBetweenHandles CGColor];
+}
+
+-(void)setTintColorLeftOfHandles:(UIColor *)tintColorLeftOfHandles{
+    tintColorLeftOfHandles = tintColorLeftOfHandles;
+    self.sliderLineLeftOfHandles.backgroundColor = [tintColorLeftOfHandles CGColor];
+}
+
+-(void)setTintColorRightOfHandles:(UIColor *)tintColorRightOfHandles{
+    tintColorRightOfHandles = tintColorRightOfHandles;
+    self.sliderLineRightOfHandles.backgroundColor = [tintColorRightOfHandles CGColor];
 }
 
 -(void)setLineHeight:(CGFloat)lineHeight{

@@ -100,12 +100,22 @@ IB_DESIGNABLE
 /**
  *Handle slider with custom color, you can set custom color for your handle
  */
-@property (nonatomic, strong) UIColor *handleColor;
+@property (nonatomic, strong) UIColor *leftHandleColor;
 
 /**
  *Handle slider with custom border color, you can set custom border color for your handle
  */
-@property (nonatomic, strong) UIColor *handleBorderColor;
+@property (nonatomic, strong) UIColor *leftHandleBorderColor;
+
+/**
+ *Handle slider with custom color, you can set custom color for your handle
+ */
+@property (nonatomic, strong) UIColor *rightHandleColor;
+
+/**
+ *Handle slider with custom border color, you can set custom border color for your handle
+ */
+@property (nonatomic, strong) UIColor *rightHandleBorderColor;
 
 /**
  *Handle border width (default 0.0)
@@ -126,6 +136,16 @@ IB_DESIGNABLE
  *Set slider line tint color between handles
  */
 @property (nonatomic, strong) UIColor *tintColorBetweenHandles;
+
+/**
+ *Set slider line tint color to the left of the left handles
+ */
+@property (nonatomic, strong) UIColor *tintColorLeftOfHandles;
+
+/**
+ *Set slider line tint color to the right of the right handles
+ */
+@property (nonatomic, strong) UIColor *tintColorRightOfHandles;
 
 /**
  *Set the slider line height (default 1.0)
