@@ -261,9 +261,9 @@ static const CGFloat kLabelsFontSize = 12.0f;
                                                     self.leftHandle.position.x,
                                                     self.lineHeight);
     
-    self.sliderLineRightOfHandles.frame = CGRectMake(self.rightHandle.position.x,
+    self.sliderLineRightOfHandles.frame = CGRectMake(rightHandleCenter.x,
                                                      self.sliderLine.frame.origin.y,
-                                                     self.sliderLine.frame.origin.x + self.frame.size.width,
+                                                     self.sliderLine.frame.size.width-rightHandleCenter.x+self.sliderLine.frame.origin.x,
                                                      self.lineHeight);
 }
 
